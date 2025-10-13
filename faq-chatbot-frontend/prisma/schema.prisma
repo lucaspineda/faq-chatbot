@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(dbgenerated("(gen_random_uuid())::text"))
+  email        String?       @unique
+  name         String?
+  lastName     String?       @map("last_name")
+  passwordHash String?       @map("password_hash")
+  isAnonymous  Boolean       @default(false) @map("is_anonymous")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  chatSessions ChatSession[]
+  sessions     Session[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Session {
+  id              String   @id @default(dbgenerated("(gen_random_uuid())::text"))
+  sessionToken    String   @unique @map("session_token")
+  userId          String?  @map("user_id")
+  anonymousUserId String?  @map("anonymous_user_id")
+  expires         DateTime
+  createdAt       DateTime @default(now()) @map("created_at")
+  user            User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([sessionToken])
+  @@index([userId])
+  @@index([anonymousUserId])
+  @@map("sessions")
+}
+
+model ChatSession {
+  id        String        @id @default(dbgenerated("(gen_random_uuid())::text"))
+  userId    String        @map("user_id")
+  title     String        @default("New Chat")
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  messages  ChatMessage[]
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id            String      @id @default(dbgenerated("(gen_random_uuid())::text"))
+  chatSessionId String      @map("chat_session_id")
+  role          String
+  content       String
+  createdAt     DateTime    @default(now()) @map("created_at")
+  chatSession   ChatSession @relation(fields: [chatSessionId], references: [id], onDelete: Cascade)
+
+  @@index([chatSessionId])
+  @@map("chat_messages")
+}
