@@ -1,0 +1,4 @@
+export const CHAT_CONFIG = {
+  HISTORY_MESSAGE_LIMIT: 10,
+  PAGINATION_LIMIT: 10,
+} as const

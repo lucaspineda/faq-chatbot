@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server'
 import { createUIMessageStream, createUIMessageStreamResponse, UIMessage } from 'ai'
+import { CHAT_CONFIG } from '@/config/chat'
+import type { UIMessagePart } from '@/types/chat'
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,6 +26,21 @@ export async function POST(req: NextRequest) {
       .map(part => part.type === 'text' ? part.text : '')
       .join('')
 
+    const conversationHistory = messages
+      .slice(-(CHAT_CONFIG.HISTORY_MESSAGE_LIMIT + 1), -1)
+      .map((msg) => {
+        const content = msg.parts
+          .filter(p => p.type === 'text')
+          .map(p => (p as UIMessagePart).text)
+          .join('')
+        
+        return {
+          role: msg.role,
+          content: content
+        }
+      })
+      .filter(msg => msg.content.trim().length > 0)
+
     const stream = createUIMessageStream({
       async execute({ writer }) {
         const backendUrl = process.env.FASTAPI_INTERNAL_URL || 'http://localhost:8000'
@@ -34,7 +51,10 @@ export async function POST(req: NextRequest) {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: userText }),
+          body: JSON.stringify({ 
+            message: userText,
+            history: conversationHistory
+          }),
         })
 
         if (!response.ok) {
@@ -68,10 +88,12 @@ export async function POST(req: NextRequest) {
                 const data = line.slice(6)
                 if (data === '[DONE]') break
                 if (data && !data.startsWith('Error')) {
+                  // Replace placeholders back to newlines
+                  const restoredData = data.replace(/<\|newline\|>/g, '\n')
                   writer.write({
                     type: 'text-delta',
                     id: textId,
-                    delta: data,
+                    delta: restoredData,
                   })
                 }
               }

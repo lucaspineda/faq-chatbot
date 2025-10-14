@@ -7,6 +7,9 @@ import { useState, useEffect, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
+import { CHAT_CONFIG } from '@/config/chat'
+import type { ChatMessagesResponse, UIMessagePart } from '@/types/chat'
+import { MarkdownMessage } from './MarkdownMessage'
 
 export function ChatInput() {
   const [anonymousToken, setAnonymousToken] = useState<string | null>(null)
@@ -93,7 +96,7 @@ export function ChatInput() {
       try {
         const content = message.parts
           .filter(p => p.type === 'text')
-          .map(p => (p as any).text)
+          .map(p => (p as UIMessagePart).text)
           .join('')
 
         await fetch(`/api/chats/${currentChatId}/messages`, {
@@ -115,11 +118,11 @@ export function ChatInput() {
       if (!chatId) return
 
       try {
-        const response = await fetch(`/api/chats/${chatId}/messages?limit=10`)
+        const response = await fetch(`/api/chats/${chatId}/messages?limit=${CHAT_CONFIG.PAGINATION_LIMIT}`)
         if (response.ok) {
-          const data = await response.json()
+          const data: ChatMessagesResponse = await response.json()
           
-          const loadedMessages = data.messages.map((msg: any) => ({
+          const loadedMessages = data.messages.map((msg) => ({
             id: msg.id,
             role: msg.role,
             parts: [{ type: 'text' as const, text: msg.content }]
@@ -148,11 +151,11 @@ export function ChatInput() {
     setShouldAutoScroll(false)
     
     try {
-      const response = await fetch(`/api/chats/${chatId}/messages?limit=10&cursor=${nextCursor}`)
+      const response = await fetch(`/api/chats/${chatId}/messages?limit=${CHAT_CONFIG.PAGINATION_LIMIT}&cursor=${nextCursor}`)
       if (response.ok) {
-        const data = await response.json()
+        const data: ChatMessagesResponse = await response.json()
         
-        const olderMessages = data.messages.map((msg: any) => ({
+        const olderMessages = data.messages.map((msg) => ({
           id: msg.id,
           role: msg.role,
           parts: [{ type: 'text' as const, text: msg.content }]
@@ -160,7 +163,7 @@ export function ChatInput() {
         
         setMessages(prev => {
           const existingIds = new Set(prev.map(m => m.id))
-          const newMessages = olderMessages.filter((m: any) => !existingIds.has(m.id))
+          const newMessages = olderMessages.filter((m) => !existingIds.has(m.id))
           return [...newMessages, ...prev]
         })
         
@@ -258,26 +261,34 @@ export function ChatInput() {
             <p className="text-sm mt-2">Ask me anything about fintech!</p>
           </div>
         ) : (
-          messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
+          messages.map((message) => {
+            const isStreaming = status === 'streaming' && message === messages[messages.length - 1]
+            const content = message.parts
+              .filter(p => p.type === 'text')
+              .map(p => (p as UIMessagePart).text)
+              .join('')
+            
+            return (
               <div
-                className={`max-w-[70%] rounded-lg px-4 py-2 ${
-                  message.role === 'user'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-900'
-                }`}
+                key={message.id}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                {message.parts.map((part, index) => 
-                  part.type === 'text' ? (
-                    <p key={index} className="whitespace-pre-wrap">{part.text}</p>
-                  ) : null
-                )}
+                <div
+                  className={`max-w-[70%] rounded-lg px-4 py-2 ${
+                    message.role === 'user'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100'
+                  }`}
+                >
+                  {message.role === 'user' ? (
+                    <p className="whitespace-pre-wrap">{content}</p>
+                  ) : (
+                    <MarkdownMessage content={content} isStreaming={isStreaming} />
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            )
+          })
         )}
         {status === 'streaming' && messages[messages.length - 1]?.role === 'user' && (
           <div className="flex justify-start">

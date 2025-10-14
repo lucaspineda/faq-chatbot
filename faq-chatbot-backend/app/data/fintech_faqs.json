@@ -1,0 +1,214 @@
+{
+  "faqs": [
+    {
+      "id": "faq-001",
+      "question": "How do I create an account?",
+      "answer": "To create an account, click on 'Sign Up' on our homepage. You'll need to provide your email address, create a password, and verify your email. After email verification, you'll need to complete KYC (Know Your Customer) verification by uploading a government-issued ID and proof of address.",
+      "category": "account",
+      "keywords": ["signup", "register", "create account", "new user", "join"]
+    },
+    {
+      "id": "faq-002",
+      "question": "How do I make a payment or transfer money?",
+      "answer": "To make a payment: 1) Log in to your account, 2) Navigate to 'Payments' or 'Transfer', 3) Enter the recipient's account details or select from saved payees, 4) Enter the amount and select currency, 5) Review and confirm the transaction. You may need to authenticate with 2FA. Payments are typically processed within 1-3 business days for domestic transfers and 3-5 days for international transfers.",
+      "category": "payments",
+      "keywords": ["send money", "transfer", "payment", "wire", "pay"]
+    },
+    {
+      "id": "faq-003",
+      "question": "What are the payment limits?",
+      "answer": "Payment limits vary by account verification level: Unverified accounts: $500/day, $2,000/month. Basic verification: $5,000/day, $25,000/month. Full verification: $50,000/day, $250,000/month. Business accounts have custom limits. You can request higher limits by contacting support with your business documentation.",
+      "category": "payments",
+      "keywords": ["limits", "maximum", "daily limit", "transaction limit", "cap"]
+    },
+    {
+      "id": "faq-004",
+      "question": "What fees do you charge for transactions?",
+      "answer": "Our fee structure: Domestic transfers: Free for standard (3-5 days), $5 for express (same day). International transfers: 1.5% of transaction amount (minimum $10). Card payments: 2.9% + $0.30 per transaction. ATM withdrawals: $2.50 per withdrawal. Monthly maintenance: $0 (free account). We display all fees upfront before you confirm any transaction.",
+      "category": "fees",
+      "keywords": ["cost", "charges", "fees", "pricing", "price"]
+    },
+    {
+      "id": "faq-005",
+      "question": "Is my money safe? What security measures do you have?",
+      "answer": "Yes, your money is safe. We employ bank-level security: 256-bit SSL encryption for all data transmission, multi-factor authentication (2FA), biometric login options, real-time fraud monitoring, and FDIC insurance up to $250,000 per account. We never store your full card details. All transactions require authentication. We're also compliant with PCI-DSS, SOC 2, and regularly audited by third-party security firms.",
+      "category": "security",
+      "keywords": ["safe", "secure", "protection", "encryption", "fraud"]
+    },
+    {
+      "id": "faq-006",
+      "question": "What is KYC and why do I need to verify my identity?",
+      "answer": "KYC (Know Your Customer) is a regulatory requirement that helps prevent fraud, money laundering, and identity theft. Verification involves providing: 1) Government-issued ID (passport, driver's license), 2) Proof of address (utility bill, bank statement), 3) Selfie for facial verification. This process typically takes 24-48 hours. Verified accounts have higher transaction limits and access to all features.",
+      "category": "verification",
+      "keywords": ["identity", "KYC", "verification", "documents", "ID"]
+    },
+    {
+      "id": "faq-007",
+      "question": "How long does verification take?",
+      "answer": "Standard verification typically takes 24-48 hours. Express verification (available for $25 fee) is completed within 2 hours during business hours. You'll receive an email once verification is complete. If additional documents are needed, we'll notify you via email. Business account verification takes 3-5 business days due to additional compliance checks.",
+      "category": "verification",
+      "keywords": ["how long", "time", "verification time", "wait", "pending"]
+    },
+    {
+      "id": "faq-008",
+      "question": "Can I use your service internationally?",
+      "answer": "Yes, we support international transfers to over 150 countries. We support 50+ currencies with competitive exchange rates (updated every 30 minutes). International transfers take 3-5 business days. Some countries have specific requirements or restrictions. You can check supported countries and currencies in your account dashboard under 'International Transfers'.",
+      "category": "international",
+      "keywords": ["global", "worldwide", "countries", "international", "overseas"]
+    },
+    {
+      "id": "faq-009",
+      "question": "How do I add a credit or debit card?",
+      "answer": "To add a card: 1) Go to 'Settings' → 'Payment Methods', 2) Click 'Add Card', 3) Enter card details (number, expiry, CVV), 4) Enter billing address, 5) Verify with $1 authorization charge (refunded immediately). We accept Visa, Mastercard, American Express, and Discover. You can store multiple cards and set a default payment method.",
+      "category": "cards",
+      "keywords": ["credit card", "debit card", "add card", "payment method", "link card"]
+    },
+    {
+      "id": "faq-010",
+      "question": "How do I dispute a transaction?",
+      "answer": "To dispute a transaction: 1) Log in and go to 'Transaction History', 2) Find the transaction and click 'Dispute', 3) Select reason (unauthorized charge, wrong amount, service not received, etc.), 4) Provide supporting details and documents, 5) Submit dispute. We'll review within 2-3 business days. You'll receive provisional credit if eligible. Most disputes are resolved within 10 business days. For fraudulent transactions, report immediately for fastest resolution.",
+      "category": "disputes",
+      "keywords": ["chargeback", "dispute", "refund", "unauthorized", "fraud"]
+    },
+    {
+      "id": "faq-011",
+      "question": "How do I close my account?",
+      "answer": "To close your account: 1) Transfer or withdraw all remaining balance, 2) Cancel any recurring payments or subscriptions, 3) Go to 'Settings' → 'Account' → 'Close Account', 4) Confirm closure. Account closure is permanent and takes effect within 24 hours. You'll receive a confirmation email. Note: You must have zero balance and no pending transactions to close your account.",
+      "category": "account",
+      "keywords": ["delete account", "close account", "deactivate", "remove account"]
+    },
+    {
+      "id": "faq-012",
+      "question": "What should I do if I forgot my password?",
+      "answer": "Click 'Forgot Password' on the login page. Enter your registered email address. You'll receive a password reset link valid for 1 hour. Click the link and create a new password (minimum 8 characters, must include uppercase, lowercase, number, and special character). For security, you'll be logged out of all devices and need to log in again with your new password.",
+      "category": "account",
+      "keywords": ["password reset", "forgot password", "reset password", "locked out"]
+    },
+    {
+      "id": "faq-013",
+      "question": "How do I enable two-factor authentication (2FA)?",
+      "answer": "To enable 2FA: 1) Go to 'Settings' → 'Security', 2) Click 'Enable 2FA', 3) Choose method: SMS, authenticator app (Google Authenticator, Authy), or email, 4) Verify your phone number or scan QR code with authenticator app, 5) Enter verification code to confirm. Save backup codes in a safe place. 2FA adds extra security by requiring a code in addition to your password when logging in.",
+      "category": "security",
+      "keywords": ["2FA", "two-factor", "authentication", "security code", "MFA"]
+    },
+    {
+      "id": "faq-014",
+      "question": "Can I schedule recurring payments?",
+      "answer": "Yes, you can set up recurring payments: 1) Go to 'Payments' → 'Recurring', 2) Click 'New Recurring Payment', 3) Enter recipient details, amount, and currency, 4) Choose frequency (weekly, bi-weekly, monthly, quarterly, annually), 5) Set start date and optional end date, 6) Review and confirm. You'll receive email notifications before each payment. You can pause or cancel recurring payments anytime.",
+      "category": "payments",
+      "keywords": ["recurring", "automatic", "scheduled", "subscription", "regular payments"]
+    },
+    {
+      "id": "faq-015",
+      "question": "What currencies do you support?",
+      "answer": "We support 50+ currencies including: USD, EUR, GBP, CAD, AUD, JPY, CHF, CNY, INR, MXN, BRL, and more. You can hold multiple currency wallets in your account. We offer competitive exchange rates updated every 30 minutes based on mid-market rates. No hidden markup on exchange rates. You can see live rates in the 'Currency Exchange' section of your dashboard.",
+      "category": "international",
+      "keywords": ["currency", "exchange", "forex", "conversion", "multi-currency"]
+    },
+    {
+      "id": "faq-016",
+      "question": "How do I add money to my account?",
+      "answer": "You can add money via: 1) Bank transfer (ACH) - free, takes 3-5 business days, 2) Wire transfer - $15 fee, same day, 3) Debit card - instant, 1.5% fee, 4) Check deposit via mobile app - free, available in 1-5 days. To add funds: Go to 'Add Money', select method, enter amount, follow instructions. Minimum deposit: $10. Maximum varies by method and verification level.",
+      "category": "deposits",
+      "keywords": ["deposit", "add money", "fund account", "top up", "load money"]
+    },
+    {
+      "id": "faq-017",
+      "question": "How do I withdraw money from my account?",
+      "answer": "To withdraw: 1) Go to 'Withdraw', 2) Select withdrawal method (bank transfer, wire, check), 3) Enter amount, 4) Confirm. Bank transfers (ACH): Free, 3-5 business days. Wire transfers: $25 fee, same day. Paper check: $5 fee, 7-10 business days. Minimum withdrawal: $10. You must have a verified bank account linked. Withdrawals are processed within 1 business day.",
+      "category": "withdrawals",
+      "keywords": ["withdraw", "cash out", "transfer to bank", "withdrawal"]
+    },
+    {
+      "id": "faq-018",
+      "question": "Do you offer a mobile app?",
+      "answer": "Yes, our mobile app is available for iOS (App Store) and Android (Google Play). Features include: view balances and transactions, send and receive money, deposit checks, pay bills, freeze/unfreeze card, enable/disable notifications, biometric login (Face ID, Touch ID, fingerprint), real-time alerts, and customer support chat. The app is free to download and use.",
+      "category": "mobile",
+      "keywords": ["app", "mobile app", "iOS", "android", "download"]
+    },
+    {
+      "id": "faq-019",
+      "question": "How do I contact customer support?",
+      "answer": "We offer 24/7 customer support via: 1) Live chat in your account dashboard or mobile app (fastest), 2) Email: support@fintechcompany.com (response within 4 hours), 3) Phone: 1-800-FINTECH (1-800-346-8324) available 24/7, 4) Help center with articles and FAQs. For account security issues, use phone support for immediate assistance. For general inquiries, live chat or email works best.",
+      "category": "support",
+      "keywords": ["contact", "help", "support", "customer service", "phone"]
+    },
+    {
+      "id": "faq-020",
+      "question": "What happens if I receive a payment by mistake?",
+      "answer": "If you receive a payment by mistake: 1) Don't spend the funds, 2) Contact the sender and request they file a dispute/reversal, 3) Contact our support to report the error. We can facilitate the return if both parties agree. Do not send money back directly as this could be a scam. We'll investigate and reverse if appropriate. Keeping funds that aren't yours may result in account suspension and legal action.",
+      "category": "disputes",
+      "keywords": ["wrong payment", "mistake", "incorrect payment", "received by error"]
+    },
+    {
+      "id": "faq-021",
+      "question": "Are there any monthly fees?",
+      "answer": "Our personal account is completely free with no monthly maintenance fees. Business accounts: Basic (free), Pro ($29/month with waived fees on 50 transactions), Enterprise (custom pricing). Optional paid features: expedited verification ($25), expedited transfers ($5-15), additional user seats for business accounts ($10/user/month). We believe in transparent pricing with no hidden fees.",
+      "category": "fees",
+      "keywords": ["monthly fee", "subscription", "membership", "account fee"]
+    },
+    {
+      "id": "faq-022",
+      "question": "How do I link my bank account?",
+      "answer": "To link a bank account: 1) Go to 'Settings' → 'Linked Accounts', 2) Click 'Add Bank Account', 3) Choose method: Instant verification (login with bank credentials) or Manual (enter routing and account numbers), 4) For manual: verify with 2 micro-deposits (small amounts we'll deposit, takes 1-2 days), 5) Confirm verification. Once linked, you can transfer money between accounts.",
+      "category": "banking",
+      "keywords": ["link bank", "connect bank", "add bank account", "plaid"]
+    },
+    {
+      "id": "faq-023",
+      "question": "What is your refund policy?",
+      "answer": "Refund eligibility depends on transaction type: Service disputes: 30-day window to request refund. Merchant disputes: Follow merchant's return policy, we can assist with chargebacks. Unauthorized transactions: Report immediately for full refund. Processing errors by us: Immediate refund. To request a refund: Go to transaction → 'Request Refund' → provide reason and evidence. Refunds typically process within 5-10 business days back to original payment method.",
+      "category": "refunds",
+      "keywords": ["refund", "money back", "return", "reimbursement"]
+    },
+    {
+      "id": "faq-024",
+      "question": "Can I have multiple accounts?",
+      "answer": "You can have one personal account per individual. However, you can: 1) Open a business account in addition to personal, 2) Create sub-accounts for different purposes (savings, spending), 3) Manage multiple businesses with separate accounts. Each account requires separate verification. Using multiple personal accounts to circumvent limits is prohibited and may result in suspension.",
+      "category": "account",
+      "keywords": ["multiple accounts", "second account", "another account"]
+    },
+    {
+      "id": "faq-025",
+      "question": "How do exchange rates work?",
+      "answer": "We use mid-market rates (the rate you see on Google/Reuters) updated every 30 minutes. No hidden markup on the exchange rate itself. We charge a transparent 1.5% conversion fee for international transfers. You can lock in a rate for up to 24 hours when scheduling payments. For large transfers ($50,000+), contact us for preferential rates. You can view historical rates in your account dashboard.",
+      "category": "international",
+      "keywords": ["exchange rate", "conversion rate", "currency rate", "FX"]
+    },
+    {
+      "id": "faq-026",
+      "question": "What information do I need to send an international wire?",
+      "answer": "For international wires, you'll need: 1) Recipient's full name and address, 2) Recipient's IBAN or account number, 3) Recipient's bank SWIFT/BIC code, 4) Recipient's bank name and address, 5) Purpose of payment (required for compliance), 6) Intermediary bank details (if required for certain countries). We'll guide you through the process and verify all details before sending.",
+      "category": "international",
+      "keywords": ["international wire", "SWIFT", "IBAN", "overseas transfer"]
+    },
+    {
+      "id": "faq-027",
+      "question": "How do I freeze or unfreeze my card?",
+      "answer": "To freeze/unfreeze your card instantly: 1) Open mobile app or log in online, 2) Go to 'Cards' section, 3) Select your card, 4) Toggle 'Freeze Card' switch. When frozen, all transactions are declined. Recurring payments and pre-authorized charges may still process. This is useful if you misplaced your card but haven't lost it. You can unfreeze anytime instantly. To report a lost/stolen card, use 'Report Lost/Stolen' option instead.",
+      "category": "cards",
+      "keywords": ["freeze card", "lock card", "disable card", "block card"]
+    },
+    {
+      "id": "faq-028",
+      "question": "What should I do if my card is lost or stolen?",
+      "answer": "If your card is lost or stolen: 1) Immediately freeze your card in the app/website, 2) Report as lost/stolen via 'Cards' → 'Report Lost/Stolen', 3) Review recent transactions for fraud, 4) Request a replacement card (free, arrives in 7-10 days; expedited $25, arrives in 2-3 days). We'll issue a new card number. If you find your old card, destroy it - it won't work anymore. Monitor your account for 30 days and report any unauthorized charges.",
+      "category": "cards",
+      "keywords": ["lost card", "stolen card", "missing card", "card replacement"]
+    },
+    {
+      "id": "faq-029",
+      "question": "Do you report to credit bureaus?",
+      "answer": "We currently do not report account activity to credit bureaus as we are not a credit provider. However, if you: 1) Have a line of credit or loan with us, that is reported, 2) Have severely negative balance or debt in collections, that may be reported. We're exploring credit-building features for the future. For now, our service focuses on payments and money management without impacting credit scores.",
+      "category": "credit",
+      "keywords": ["credit score", "credit report", "credit bureau", "credit history"]
+    },
+    {
+      "id": "faq-030",
+      "question": "How do I update my personal information?",
+      "answer": "To update personal information: 1) Log in and go to 'Settings' → 'Profile', 2) Update fields: name, email, phone, address, 3) Click 'Save Changes'. Some changes require re-verification: Name change requires ID upload. Address change requires proof of address. Email change requires verification of new email. Phone change requires SMS verification. Changes are typically processed within 24 hours. You'll receive confirmation email once updated.",
+      "category": "account",
+      "keywords": ["change address", "update info", "change email", "change phone"]
+    }
+  ]
+}

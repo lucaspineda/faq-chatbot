@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import jwt from "jsonwebtoken"
+import type { JWTPayload } from "@/types/chat"
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-      const decoded = jwt.verify(sessionToken, secret, { algorithms: ['HS256'] }) as any
+      const decoded = jwt.verify(sessionToken, secret, { algorithms: ['HS256'] }) as JWTPayload
 
       return NextResponse.json({
         token: sessionToken,

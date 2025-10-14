@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { prisma } from "@/lib/db"
 import { compare } from "bcrypt"
 import jwt from "jsonwebtoken"
+import type { JWTPayload, UserWithLastName } from "@/types/chat"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -58,7 +59,7 @@ export const authOptions: NextAuthOptions = {
         throw new Error('No token to encode')
       }
       
-      const { exp, iat, ...cleanToken } = token as any
+      const { exp, iat, ...cleanToken } = token as JWTPayload
       
       return jwt.sign(
         cleanToken, 
@@ -74,7 +75,8 @@ export const authOptions: NextAuthOptions = {
         return null
       }
       try {
-        return jwt.verify(token, secret as string, { algorithms: ['HS256'] }) as any
+        const decoded = jwt.verify(token, secret as string, { algorithms: ['HS256'] }) as JWTPayload
+        return decoded as any
       } catch (error) {
         return null
       }
@@ -84,14 +86,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
-        token.lastName = (user as any).lastName
+        token.lastName = (user as UserWithLastName).lastName
       }
       return token
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
-        ;(session.user as any).lastName = token.lastName
+        ;(session.user as UserWithLastName).lastName = token.lastName as string | null
       }
       return session
     }
