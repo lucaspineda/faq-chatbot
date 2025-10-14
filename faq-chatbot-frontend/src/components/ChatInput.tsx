@@ -11,6 +11,7 @@ import { CHAT_CONFIG } from '@/config/chat'
 import type { ChatMessagesResponse, UIMessagePart } from '@/types/chat'
 import { MarkdownMessage } from './MarkdownMessage'
 import { useChatContext } from '@/contexts/ChatContext'
+import { Spinner } from '@/components/ui/spinner'
 
 export function ChatInput() {
   const [anonymousToken, setAnonymousToken] = useState<string | null>(null)
@@ -281,7 +282,7 @@ export function ChatInput() {
         {isLoadingMore && (
           <div className="flex justify-center py-2">
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+              <Spinner size={20} />
               <span>Loading older messages...</span>
             </div>
           </div>
@@ -293,13 +294,13 @@ export function ChatInput() {
             <p className="text-sm mt-2">Ask me anything about fintech!</p>
           </div>
         ) : (
-          messages.map((message) => {
+          messages.map((message, idx) => {
             const isStreaming = status === 'streaming' && message === messages[messages.length - 1]
             const content = message.parts
               .filter(p => p.type === 'text')
               .map(p => (p as UIMessagePart).text)
               .join('')
-            
+            const isLastAssistant = message.role === 'assistant' && idx === messages.length - 1 && status === 'streaming' && !content
             return (
               <div
                 key={message.id}
@@ -315,20 +316,23 @@ export function ChatInput() {
                   {message.role === 'user' ? (
                     <p className="whitespace-pre-wrap">{content}</p>
                   ) : (
-                    <MarkdownMessage content={content} isStreaming={isStreaming} />
+                    <>
+                      {isLastAssistant ? (
+                        <div className="flex items-center gap-2">
+                          <Spinner size={18} />
+                          <span className="animate-pulse">Agent is processing your answer...</span>
+                        </div>
+                      ) : (
+                        <MarkdownMessage content={content} isStreaming={isStreaming} />
+                      )}
+                    </>
                   )}
                 </div>
               </div>
             )
           })
         )}
-        {status === 'streaming' && messages[messages.length - 1]?.role === 'user' && (
-          <div className="flex justify-start">
-            <div className="bg-gray-200 text-gray-900 rounded-lg px-4 py-2">
-              <p className="animate-pulse">Thinking...</p>
-            </div>
-          </div>
-        )}
+        {/* Spinner now appears inside the bubble, not outside */}
         <div ref={messagesEndRef} />
       </div>
 

@@ -33,12 +33,6 @@ export function ChatAside() {
   const { activeChatId, setActiveChatId, refreshChats, triggerRefreshChats, isSidebarOpen, setIsSidebarOpen } = useChatContext()
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([])
   const [isCreatingChat, setIsCreatingChat] = useState(false)
-  
-  if (!session?.user) {
-    return null
-  }
-  
-  const user = session.user
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -57,6 +51,12 @@ export function ChatAside() {
 
     fetchChats()
   }, [session?.user?.id, refreshChats])
+  
+  if (!session?.user) {
+    return null
+  }
+  
+  const user = session.user
 
   const handleNewChat = async () => {
     if (!session?.user?.id || isCreatingChat) return
@@ -83,7 +83,6 @@ export function ChatAside() {
 
   const handleChatClick = (chatId: string) => {
     setActiveChatId(chatId)
-    // Close sidebar on mobile when a chat is selected
     setIsSidebarOpen(false)
   }
 
