@@ -3,7 +3,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List, Dict
 from app.utils.auth import get_current_user
-from app.services.openai_service import generate_chat_response
+from app.services.openai_service import generate_chat_response, generate_chat_title
 from app.services.knowledge_base import KnowledgeBaseService
 from app.config.chat import FAQ_SEARCH_TOP_K, FAQ_SEARCH_MIN_SCORE
 
@@ -13,6 +13,10 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 class ChatMessage(BaseModel):
     message: str
     history: List[Dict[str, str]] = []
+
+
+class TitleRequest(BaseModel):
+    message: str
 
 
 @router.get("/test")
@@ -78,4 +82,17 @@ async def send_message(
             "Connection": "keep-alive",
         }
     )
+
+
+@router.post("/generate-title")
+async def generate_title(
+    request: TitleRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    try:
+        title = await generate_chat_title(request.message)
+        return {"title": title}
+    except Exception as e:
+        print(f"Error generating title: {str(e)}")
+        return {"title": "New Chat"}
 

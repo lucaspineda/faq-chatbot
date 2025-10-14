@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/auth'
 import { prisma } from '@/lib/db'
+import { getUserIdFromRequest } from '@/lib/auth-helpers'
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ chatId: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    const userId = await getUserIdFromRequest(req)
     
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
@@ -19,7 +18,7 @@ export async function GET(
     const chat = await prisma.chatSession.findFirst({
       where: {
         id: chatId,
-        userId: session.user.id
+        userId: userId
       }
     })
     
@@ -72,9 +71,9 @@ export async function POST(
   { params }: { params: Promise<{ chatId: string }> }
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    const userId = await getUserIdFromRequest(req)
     
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
@@ -84,7 +83,7 @@ export async function POST(
     const chat = await prisma.chatSession.findFirst({
       where: {
         id: chatId,
-        userId: session.user.id
+        userId: userId
       }
     })
     

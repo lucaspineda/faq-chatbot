@@ -10,11 +10,12 @@ import { DefaultChatTransport } from 'ai'
 import { CHAT_CONFIG } from '@/config/chat'
 import type { ChatMessagesResponse, UIMessagePart } from '@/types/chat'
 import { MarkdownMessage } from './MarkdownMessage'
+import { useChatContext } from '@/contexts/ChatContext'
 
 export function ChatInput() {
   const [anonymousToken, setAnonymousToken] = useState<string | null>(null)
   const [input, setInput] = useState("")
-  const [chatId, setChatId] = useState<string | null>(null)
+  const { activeChatId, setActiveChatId, triggerRefreshChats } = useChatContext()
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [hasMoreMessages, setHasMoreMessages] = useState(false)
   const [nextCursor, setNextCursor] = useState<string | null>(null)
@@ -23,10 +24,11 @@ export function ChatInput() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const chatIdRef = useRef<string | null>(null)
+  const isInitializingRef = useRef(false)
   
   useEffect(() => {
-    chatIdRef.current = chatId
-  }, [chatId])
+    chatIdRef.current = activeChatId
+  }, [activeChatId])
 
   useEffect(() => {
     const storedToken = localStorage.getItem('anonymous-token')
@@ -38,6 +40,11 @@ export function ChatInput() {
   useEffect(() => {
     const initChat = async () => {
       if (!session?.user?.id) return
+      
+      if (isInitializingRef.current) return
+      if (activeChatId) return
+
+      isInitializingRef.current = true
 
       try {
         const chatsResponse = await fetch('/api/chats')
@@ -48,7 +55,7 @@ export function ChatInput() {
           if (chats.length > 0) {
             const latestChat = chats[0]
             chatIdRef.current = latestChat.id
-            setChatId(latestChat.id)
+            setActiveChatId(latestChat.id)
             return
           }
         }
@@ -63,15 +70,17 @@ export function ChatInput() {
         if (response.ok) {
           const chat = await response.json()
           chatIdRef.current = chat.id
-          setChatId(chat.id)
+          setActiveChatId(chat.id)
         }
       } catch (error) {
         console.error('Error initializing chat:', error)
+      } finally {
+        isInitializingRef.current = false
       }
     }
 
     initChat()
-  }, [session])
+  }, [session, activeChatId])
 
   const getOrCreateAnonymousToken = async () => {
     if (anonymousToken) return anonymousToken
@@ -91,7 +100,8 @@ export function ChatInput() {
     }),
     onFinish: async ({ message }) => {
       const currentChatId = chatIdRef.current
-      if (!currentChatId) return
+      // Only save to database for authenticated users with chat sessions
+      if (!currentChatId || !session) return
 
       try {
         const content = message.parts
@@ -107,6 +117,9 @@ export function ChatInput() {
             content
           })
         })
+        
+        // Update chat list after saving message
+        triggerRefreshChats()
       } catch (error) {
         console.error('Failed to save message:', error)
       }
@@ -115,10 +128,10 @@ export function ChatInput() {
 
   useEffect(() => {
     const loadMessages = async () => {
-      if (!chatId) return
+      if (!activeChatId || !session) return
 
       try {
-        const response = await fetch(`/api/chats/${chatId}/messages?limit=${CHAT_CONFIG.PAGINATION_LIMIT}`)
+        const response = await fetch(`/api/chats/${activeChatId}/messages?limit=${CHAT_CONFIG.PAGINATION_LIMIT}`)
         if (response.ok) {
           const data: ChatMessagesResponse = await response.json()
           
@@ -142,16 +155,16 @@ export function ChatInput() {
     }
 
     loadMessages()
-  }, [chatId, setMessages])
+  }, [activeChatId, session])
 
   const loadMoreMessages = async () => {
-    if (!chatId || !hasMoreMessages || isLoadingMore || !nextCursor) return
+    if (!activeChatId || !hasMoreMessages || isLoadingMore || !nextCursor || !session) return
 
     setIsLoadingMore(true)
     setShouldAutoScroll(false)
     
     try {
-      const response = await fetch(`/api/chats/${chatId}/messages?limit=${CHAT_CONFIG.PAGINATION_LIMIT}&cursor=${nextCursor}`)
+      const response = await fetch(`/api/chats/${activeChatId}/messages?limit=${CHAT_CONFIG.PAGINATION_LIMIT}&cursor=${nextCursor}`)
       if (response.ok) {
         const data: ChatMessagesResponse = await response.json()
         
@@ -217,9 +230,10 @@ export function ChatInput() {
       token = await getOrCreateAnonymousToken()
     }
 
-    if (chatId) {
+    if (activeChatId && session) {
       try {
-        await fetch(`/api/chats/${chatId}/messages`, {
+        // Save user message
+        await fetch(`/api/chats/${activeChatId}/messages`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -227,11 +241,29 @@ export function ChatInput() {
             content: input
           })
         })
+        
+        if (messages.length === 0 && token) {
+          try {
+            const { generateChatTitle } = await import('@/lib/generate-title')
+            const title = await generateChatTitle(input, token)
+            
+            await fetch(`/api/chats/${activeChatId}/title`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ title })
+            })
+            
+            triggerRefreshChats()
+          } catch (error) {
+            console.error('Failed to generate title:', error)
+          }
+        }
       } catch (error) {
         console.error('Failed to save user message:', error)
       }
     }
     
+    // Send message to AI (works for both authenticated and anonymous users)
     sendMessage(
       { text: input },
       {

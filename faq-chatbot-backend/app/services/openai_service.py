@@ -46,6 +46,9 @@ async def generate_chat_response(
 You provide accurate, concise, and friendly answers to questions about financial technology, 
 banking, payments, and related topics.
 
+You have access to the conversation history and should reference it when relevant. 
+If a user asks about something mentioned earlier in the conversation, acknowledge it and provide context-aware responses.
+
 CRITICAL: You MUST use actual newline characters in your response. Use \n\n (two newlines) for spacing between sections, paragraphs, and markdown elements.
 
 Format your responses using Markdown with proper line breaks:
@@ -97,3 +100,34 @@ Structure your answers clearly with proper \n\n spacing between all sections."""
 
     except Exception as e:
         yield f"Error generating response: {str(e)}"
+
+
+async def generate_chat_title(message: str) -> str:
+    client = get_openai_client()
+    
+    try:
+        response = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Generate a short, concise title (max 6 words) for a chat conversation based on the user's first message. Return ONLY the title, nothing else. Do not use quotes."
+                },
+                {
+                    "role": "user",
+                    "content": message
+                }
+            ],
+            temperature=0.7,
+            max_tokens=20
+        )
+        
+        title = response.choices[0].message.content.strip()
+        
+        # Remove quotes if present
+        title = title.strip('"\'')
+        
+        return title if title else "New Chat"
+    except Exception as e:
+        logger.error(f"Error generating chat title: {str(e)}")
+        return "New Chat"

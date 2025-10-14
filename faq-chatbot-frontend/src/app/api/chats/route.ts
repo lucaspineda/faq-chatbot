@@ -1,24 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/auth'
 import { prisma } from '@/lib/db'
+import { getUserIdFromRequest } from '@/lib/auth-helpers'
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-    
-    // Get user ID from session or Authorization header (for anonymous)
-    let userId: string | null = null
-    
-    if (session?.user?.id) {
-      userId = session.user.id
-    } else {
-      const authHeader = req.headers.get('authorization')
-      if (authHeader?.startsWith('Bearer ')) {
-        const token = authHeader.substring(7)
-        // decode the anonymous token to get userId later
-      }
-    }
+    const userId = await getUserIdFromRequest(req)
     
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -47,9 +33,9 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const userId = await getUserIdFromRequest(req)
     
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     
@@ -57,7 +43,7 @@ export async function POST(req: NextRequest) {
     
     const chat = await prisma.chatSession.create({
       data: {
-        userId: session.user.id,
+        userId: userId,
         title: title || 'New Chat',
       }
     })
