@@ -3,8 +3,19 @@
 # Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
-RED='\033[0;31m'
-BLUE='\033[0;34m'
+RED='\033[0;# Start services with Docker Compose
+echo ""
+echo -e "${YELLOW}🐳 Starting services with Docker Compose...${NC}"
+echo -e "${BLUE}   This may take a few minutes on first run...${NC}"
+echo ""
+
+docker-compose up -d --build
+
+# Wait for services to be healthy
+echo ""
+echo -e "${YELLOW}⏳ Waiting for services to be ready...${NC}"
+echo -e "${BLUE}   (This usually takes 15-30 seconds)${NC}"
+sleep 15033[0;34m'
 NC='\033[0m' # No Color
 
 echo ""
@@ -57,7 +68,8 @@ if [ ! -f .env ]; then
   echo -e "${YELLOW}Press Enter after you've updated the .env file...${NC}"
   read -r
 else
-  echo -e "${GREEN}✅ .env file exists${NC}"
+  echo -e "${GREEN}✅ .env file already exists, skipping creation${NC}"
+  echo -e "${BLUE}   Using existing configuration...${NC}"
 fi
 
 # Validate required environment variables
