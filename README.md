@@ -1,3 +1,18 @@
+# Techinical decisions and approach
+
+I started by designing the problem and thinking about the key decisions for the architecture. Once I began implementing, I realized some choices could be improved, so I iterated on the architecture as I went.
+
+In order to achieve server-side authentication and keep the architecture simple, I chose Next.js with SSR for the frontend. This setup makes it easy to check user authentication on the server using NextAuth, and is straightforward to deploy to Amazon ECS Fargate.
+
+For authentication, I used JWT with help from NextAuth, that simplified the setup. On the backend, validation of the user's JWT is happening to make sure only authenticated users are making requests. JWT tokens are also created for anonymous users for the logged off chat interaction.
+
+For simplicity and speed, all database access (PostgreSQL) is handled on the Next.js side. Ideally, all backend operations would go through FastAPI, but for this project, FastAPI is focused on the agent ecosystem and Pinecone integration (RAG, semantic search, OpenAI calls). Next.js manages chat history, sessions, and user management directly.
+
+On the frontend, I used Vercel's AI SDK to simplify building the chat UI and streaming agent responses.
+
+A cursor-based pagination was added to the chat history. I set the message limit to 10 for demo purposes, but ideally it should be 20 or more so the system has time to load messages before the user scrolls too quickly and hits bugs.
+
+
 # FAQ Chatbot - AI-Powered Chat Application
 
 A full-stack chatbot application with anonymous and authenticated chat sessions, powered by OpenAI GPT-4o.
