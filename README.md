@@ -17,6 +17,11 @@ A cursor-based pagination was added to the chat history. I set the message limit
 
 A full-stack chatbot application with anonymous and authenticated chat sessions, powered by OpenAI GPT-4o.
 
+
+## Data Source
+
+The project includes a `fintech_faqs.json` file containing all the FAQ questions and answers. This file is used to populate the Pinecone vector database for semantic search and retrieval-augmented generation (RAG).
+
 ## 🚀 One-Command Setup
 
 ### Prerequisites
@@ -60,9 +65,10 @@ A full-stack chatbot application with anonymous and authenticated chat sessions,
 - No data persistence
 - Mobile-responsive design
 
+
 ### Authenticated Users  
 - Full chat history with multiple sessions
-- Vector database for semantic FAQ search
+- Vector database for semantic FAQ search (populated from `fintech_faqs.json`)
 - Create and manage multiple chats
 - AI-generated chat titles
 - Cursor-Based Chat History Pagination (Limits customizables)
